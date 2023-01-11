@@ -41,6 +41,10 @@ def get_data(name="CONLL_2003", batch_size=128, random_seed=0, root='../data/', 
         stats['max_length'] = max_length
         stats['ids_to_labels'] = train_loader.dataset.ids_to_labels
         
+        
+        train_loader = DataSequence(train_df, max_length=max_length)
+        val_loader = DataSequence(train_df, max_length=max_length)
+        test_loader = DataSequence(train_df, max_length=max_length)
     else:
         exit("dataset not found")
     
