@@ -12,7 +12,7 @@ import random
 import sys
 sys.path.append(".")
 
-from model.BILSTM_CRF import BiLSTM_CRF
+from model.BILSTM_CRF import BIRNN_CRF
 from dataset.CONLL_2003 import DataSequence
 from trainer.trainer import trainer_base
 from dataset.get_data import get_data
@@ -24,12 +24,12 @@ def setup():
     parser = argparse.ArgumentParser()
     parser.add_argument('--random_seed', type=int, default=2)
     parser.add_argument('--workspace', type=str, default="checkpoints/")
-    parser.add_argument('--run_name', type=str, default="1")
+    parser.add_argument('--run_name', type=str, default="BILSTM_CRF")
     parser.add_argument('--dataset', type=str, default="CONLL_2003")
     parser.add_argument('--model', type=str, default="MLP")
-    parser.add_argument('--learning_rate', type=float, default=1e-4)
-    parser.add_argument('--batch_size', type=int, default=100)
-    parser.add_argument('--rounds', type=int, default=1000)
+    parser.add_argument('--learning_rate', type=float, default=1e-3)
+    parser.add_argument('--batch_size', type=int, default=128)
+    parser.add_argument('--rounds', type=int, default=50)
     
     
     args = parser.parse_args()
@@ -57,7 +57,7 @@ def pytorchlightning_wandb_setup(args):
     Returns:
         wandb_logger: will be used for Pytorch lightning trainer
     """
-    wandb_logger = WandbLogger(project="STN", \
+    wandb_logger = WandbLogger(project="NBFF", \
                                 name=args.run_name, \
                                 save_dir=args.workspace)
     # wandb_logger.experiment.config.update({
@@ -80,46 +80,37 @@ if __name__ == "__main__":
 
     device = torch.device("cuda")
     
-    trainloader, valloader, testloader, stats = get_data(name=args.dataset, batch_size=args.batch_size)
+    trainloader, valloader, testloader, stats = get_data(name=args.dataset, batch_size=args.batch_size, max_length=75)
     args.ids_to_labels =stats['ids_to_labels']
     
     
-
+    model = BIRNN_CRF(vocab_size=stats['vocab_size'], \
+                        tagset_size = len(args.ids_to_labels)-2, \
+                    #    tag_to_ix=stats['tag_to_ix'], \
+                    #    char_to_ix=stats['char_to_ix'], \
+                       embedding_dim=200, \
+                       num_rnn_layers=1, \
+                       hidden_dim=256, device=device)
     
-    model = BiLSTM_CRF(vocab_size=stats['vocab_size'], \
-                       tag_to_ix=stats['tag_to_ix'], \
-                       embedding_dim=32, \
-                       hidden_dim=500, \
-                       word_dim=stats['max_length'], \
-                       device=device)
-    
-    model = model.to(device)
-    from torch.optim import SGD, AdamW, Adam, LBFGS
-    optimizer = AdamW([
-                {'params': model.parameters(), 'lr': args.learning_rate}
-                ])
-    for i in range(100):
-        print("============")
-        for x, y in trainloader:
-            print(x.shape, y.shape)
-            model.zero_grad()
-            x = x.to(device)
-            y = y.to(device)
-            # print(x.shape, y.shape)
-            # print(model(x))
-            loss = model.neg_log_likelihood(x, y)
-            loss.backward()
-            optimizer.step()
-            print(loss)
-            asdf
-        
-    exit("finished")
+    # from torch.optim import SGD, AdamW
+    # optimizer = AdamW([
+    #             {'params': model.parameters(), 'lr': args.learning_rate}
+    #             ])
+    # model = model.to(device)
+    # for _ in range(args.rounds):
+    #     for x, y in trainloader:
+    #         x, y = x.to(device), y.to(device)
+    #         model.zero_grad()
+    #         loss = model.loss(x, y)
+    #         loss.backward()
+    #         optimizer.step()
+            
     
         
     args.wandb_logger = pytorchlightning_wandb_setup(args=args)
     trainer = pl.Trainer(max_epochs=args.rounds, 
                         accelerator="gpu", 
-                        devices=1, 
+                        devices=4, 
                         strategy = DDPStrategy(find_unused_parameters=False),
                         log_every_n_steps=1,
                         auto_scale_batch_size=True,

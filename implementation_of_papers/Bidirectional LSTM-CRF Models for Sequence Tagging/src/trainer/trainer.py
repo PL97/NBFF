@@ -29,15 +29,15 @@ class trainer_base(pl.LightningModule):
     
     def training_step(self, batch, batch_idx):
         X, y = batch
-        y = y.view(-1).long()
+        y = y.long()
+        loss = self.model.loss(X, y)
         score, pred = self.model(X)
-        loss = self.model.neg_log_likelihood(X, y)
-        # loss = self.criterion(pred, y)
         self.log("train/loss", loss)
         return {'loss': loss, 'preds': pred, 'target': y}
     
     def backward(self, loss, optimizer, optimizer_idx):
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0) ## optional
         
     
     @torch.no_grad()
@@ -45,8 +45,8 @@ class trainer_base(pl.LightningModule):
         # this is the test loop
         X, y = batch
         y = y.long()
-        loss, pred = self.model(X)
-        # loss = self.criterion(pred, y)
+        loss = self.model.loss(X, y)
+        score, pred = self.model(X)
         self.log("test/loss", loss)
         return {'loss': loss, 'preds': pred, 'target': y}
         
@@ -55,50 +55,52 @@ class trainer_base(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         # this is the validation loop
         X, y = batch
-        y = y.view(-1).long()
-        loss, pred = self.model(X)
-        # loss = self.criterion(pred, y)
+        y = y.long()
+        loss = self.model.loss(X, y)
+        score, pred = self.model(X)
         self.log("val/loss", loss, sync_dist=True)
         return {'loss': loss, 'preds': pred, 'target': y}
     
         
     @torch.no_grad()
     def training_epoch_end(self, outputs):
-        print("start training")
-        exit()
         preds, pred_orig, target, target_orig = [], [], [], []
         for out in outputs:
             preds.extend(out['preds'])
-            target.extend([t.item() for t in out['target']])
+            target.extend(out['target'].detach().cpu().tolist())
+        
+        preds = [item for sublist in preds for item in sublist]
+        target = [item for sublist in target for item in sublist]
         # update and log
         for p, t in zip(preds, target):
-            if self.args.ids_to_labels[t] not in ['<START>', '<STOP', '<PAD>']:
+            if self.args.ids_to_labels[t] not in ['<START>', '<STOP>', '<PAD>']:
                 pred_orig.append(self.args.ids_to_labels[p])
                 target_orig.append(self.args.ids_to_labels[t])
-        report = classification_report([pred_orig], [target_orig])
+        report = classification_report([pred_orig], [target_orig], zero_division=0)
         report_dict = parse_summary(report)
-        print(report_dict)
-        asdf
-        self.log('train/macro_avg/precision', report_dict['macro avg']['precision'], sync_dist=True)
+        self.log('train/macro_avg/precision', report_dict['macro avg']['precision'])
         self.log('train/macro_avg/recall', report_dict['macro avg']['recall'], sync_dist=True)
+        self.log('train/macro_avg/f1-score', report_dict['macro avg']['f1-score'], sync_dist=True)
     
     @torch.no_grad()
     def validation_epoch_end(self, outputs):
         preds, pred_orig, target, target_orig = [], [], [], []
         for out in outputs:
             preds.extend(out['preds'])
-            target.extend([t.item() for t in out['target']])
+            target.extend(out['target'].detach().cpu().tolist())
+        
+        preds = [item for sublist in preds for item in sublist]
+        target = [item for sublist in target for item in sublist]
         # update and log
         for p, t in zip(preds, target):
-            if self.args.ids_to_labels[t] not in ['<START>', '<STOP', '<PAD>']:
+            if self.args.ids_to_labels[t] not in ['<START>', '<STOP>', '<PAD>']:
                 pred_orig.append(self.args.ids_to_labels[p])
                 target_orig.append(self.args.ids_to_labels[t])
-        report = classification_report([pred_orig], [target_orig])
+        report = classification_report([pred_orig], [target_orig], zero_division=0)
         report_dict = parse_summary(report)
-        print("validation=================")
-        print(report_dict)
         self.log('val/macro_avg/precision', report_dict['macro avg']['precision'], sync_dist=True)
         self.log('val/macro_avg/recall', report_dict['macro avg']['recall'], sync_dist=True)
+        self.log('val/macro_avg/f1-score', report_dict['macro avg']['f1-score'], sync_dist=True)
     
     # @torch.no_grad()
     # def test(self, dataloader):
