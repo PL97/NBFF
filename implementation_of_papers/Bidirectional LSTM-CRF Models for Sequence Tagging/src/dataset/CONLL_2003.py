@@ -32,13 +32,6 @@ class DataSequence(torch.utils.data.Dataset):
         self.texts = self.text_pad
         self.labels = self.label_pad
         
-        # print(self.labels[0])
-        # print(self.labels_orig[0])
-        # print(self.texts)
-        # print(self.texts_orig[0])
-        # print(self.labels_to_ids)
-        # print(self.word_to_ids)
-        # exit("finished")
         
     def __len__(self):
         return len(self.labels)
