@@ -59,7 +59,7 @@ def get_data(name="CONLL_2003", batch_size=128, random_seed=0, root='../data/', 
         val_df, test_df = train_test_split(tmp_df, test_size=0.5)
         val_df, test_df = val_df.reset_index(drop=True), test_df.reset_index(drop=True)
         
-        labels_to_ids, ids_to_labels, word_to_ids = preprocessing(train_df=train_df)
+        labels_to_ids, ids_to_labels, word_to_ids = preprocessing(train_df=df)
         
         # Training dataset
         train_loader = torch.utils.data.DataLoader(
@@ -82,8 +82,6 @@ def get_data(name="CONLL_2003", batch_size=128, random_seed=0, root='../data/', 
                             word_to_ids=word_to_ids), \
                         batch_size=batch_size, shuffle=False, num_workers=8)
                         
-        
-        
         stats['vocab_size'] = len(word_to_ids)
         stats['tag_to_ix'] = labels_to_ids
         stats['max_length'] = max_length
