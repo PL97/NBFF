@@ -44,7 +44,7 @@ def preprocessing(train_df):
     
     unique_words.add('<PAD>')
     unique_words.add('<UNK>')
-    return labels_to_ids, ids_to_labels, word_to_ids
+    return labels_to_ids, ids_to_labels, word_to_ids, unique_labels
 
 
 def get_data(name="CONLL_2003", batch_size=128, random_seed=0, root='../data/', max_length=50):
@@ -59,7 +59,7 @@ def get_data(name="CONLL_2003", batch_size=128, random_seed=0, root='../data/', 
         val_df, test_df = train_test_split(tmp_df, test_size=0.5)
         val_df, test_df = val_df.reset_index(drop=True), test_df.reset_index(drop=True)
         
-        labels_to_ids, ids_to_labels, word_to_ids = preprocessing(train_df=df)
+        labels_to_ids, ids_to_labels, word_to_ids, unique_labels = preprocessing(train_df=df)
         
         # Training dataset
         train_loader = torch.utils.data.DataLoader(
@@ -87,6 +87,7 @@ def get_data(name="CONLL_2003", batch_size=128, random_seed=0, root='../data/', 
         stats['max_length'] = max_length
         stats['ids_to_labels'] = ids_to_labels
         stats['char_to_ix'] = word_to_ids
+        stats['unique_labels'] = unique_labels
         
         
     else:

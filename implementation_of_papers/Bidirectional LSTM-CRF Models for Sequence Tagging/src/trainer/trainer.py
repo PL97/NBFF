@@ -17,6 +17,7 @@ class trainer_base(pl.LightningModule):
         self.workspace = self.args.workspace
         self.model = model
         self.criterion = criterion
+        self.valid_labels = self.args.valid_labels
         
     def forward(self, X):
         score, pred = self.model(X)
@@ -68,9 +69,12 @@ class trainer_base(pl.LightningModule):
         # update and log
         for p, t in zip(preds, target):
             if self.args.ids_to_labels[t] not in ['<START>', '<STOP>', '<PAD>']:
-                pred_orig.append(self.args.ids_to_labels[p])
+                if self.args.ids_to_labels[p] == '<PAD>':
+                    pred_orig.append('O')
+                else:
+                    pred_orig.append(self.args.ids_to_labels[p])
                 target_orig.append(self.args.ids_to_labels[t])
-        report = classification_report([pred_orig], [target_orig], zero_division=0)
+        report = classification_report(y_true=[target_orig], y_pred=[pred_orig], zero_division=0)
         report_dict = parse_summary(report)
         if log:
             self.log(f'{prefix}/macro_avg/precision', report_dict['macro avg']['precision'])
@@ -98,25 +102,3 @@ class trainer_base(pl.LightningModule):
             f"test/{aggregation}/f1-score": report_dict['macro avg']['f1-score'] 
         }) 
         return report_dict
-    
-        
-        
-    # @torch.no_grad()
-    # def test(self, dataloader, prefix="test", aggregation="macro avg"):
-    #     self.model.eval()
-    #     self.model = self.model.to(self.device)
-    #     preds, target = ['None'] * 1
-    #     for X, y in tqdm(dataloader):
-    #         X, y = X.to(self.device), y.to(self.device)
-    #         preds.add(self.model(X))
-    #         target.add(y)
-    #     print(preds)
-    #     target = [t.detach().cpu().tolist() for t in target]
-    #     preds = [item for sublist in preds for item in sublist]
-    #     target = [item for sublist in target for item in sublist]
-    #     report_dict = self._eval(preds=preds, target=target)
-    #     wandb.run.summary.update({
-    #         f"{prefix}/{aggregation}/precision": report_dict['macro avg']['precision'], \
-    #         f"{prefix}/{aggregation}/recall": report_dict['macro avg']['recall'], \
-    #         f"{prefix}/{aggregation}/f1-score": report_dict['macro avg']['f1-score'] 
-    #     })  
