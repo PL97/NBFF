@@ -26,9 +26,8 @@ def setup():
     parser.add_argument('--workspace', type=str, default="checkpoints/")
     parser.add_argument('--run_name', type=str, default="BILSTM_CRF")
     parser.add_argument('--dataset', type=str, default="CONLL_2003")
-    parser.add_argument('--model', type=str, default="MLP")
     parser.add_argument('--learning_rate', type=float, default=1e-3)
-    parser.add_argument('--batch_size', type=int, default=128)
+    parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--rounds', type=int, default=50)
     
     
@@ -40,8 +39,7 @@ def setup():
     random.seed(random_seed)
     
     args.run_name = args.dataset
-    
-    
+
     ## create workspace
     try:
         os.removedirs(args.workspace)
@@ -60,15 +58,12 @@ def pytorchlightning_wandb_setup(args):
     wandb_logger = WandbLogger(project="NBFF", \
                                 name=args.run_name, \
                                 save_dir=args.workspace)
-    # wandb_logger.experiment.config.update({
-    #     'dataset': args.dataset, \
-    #     'rounds': args.rounds, \
-    #     'lr': args.learning_rate, \
-    #     'solver': "AdamW"
-    # })
-    # wandb_logger.watch(model, log="all")
-    # wandb.define_metric("train/*", step_metric="trainer/global_step")
-    # wandb.define_metric("val/*", step_metric="trainer/global_step")
+    wandb_logger.experiment.config.update({
+        'dataset': args.dataset, \
+        'rounds': args.rounds, \
+        'lr': args.learning_rate, \
+        'bs': args.batch_size
+    })
     return wandb_logger
 
 
@@ -82,35 +77,20 @@ if __name__ == "__main__":
     
     trainloader, valloader, testloader, stats = get_data(name=args.dataset, batch_size=args.batch_size, max_length=75)
     args.ids_to_labels =stats['ids_to_labels']
-    
+    args.valid_labels = stats['unique_labels']
     
     model = BIRNN_CRF(vocab_size=stats['vocab_size'], \
                         tagset_size = len(args.ids_to_labels)-2, \
-                    #    tag_to_ix=stats['tag_to_ix'], \
-                    #    char_to_ix=stats['char_to_ix'], \
                        embedding_dim=200, \
                        num_rnn_layers=1, \
                        hidden_dim=256, device=device)
-    
-    # from torch.optim import SGD, AdamW
-    # optimizer = AdamW([
-    #             {'params': model.parameters(), 'lr': args.learning_rate}
-    #             ])
-    # model = model.to(device)
-    # for _ in range(args.rounds):
-    #     for x, y in trainloader:
-    #         x, y = x.to(device), y.to(device)
-    #         model.zero_grad()
-    #         loss = model.loss(x, y)
-    #         loss.backward()
-    #         optimizer.step()
             
     
         
     args.wandb_logger = pytorchlightning_wandb_setup(args=args)
     trainer = pl.Trainer(max_epochs=args.rounds, 
                         accelerator="gpu", 
-                        devices=4, 
+                        devices=1, 
                         strategy = DDPStrategy(find_unused_parameters=False),
                         log_every_n_steps=1,
                         auto_scale_batch_size=True,
@@ -121,3 +101,10 @@ if __name__ == "__main__":
     trainer.fit(MyLightningModule, \
                 train_dataloaders=trainloader, \
                 val_dataloaders=valloader)
+    
+    
+    ret = trainer.test(ckpt_path='last', dataloaders=testloader)
+    print(ret)
+    
+    
+    
