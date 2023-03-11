@@ -25,7 +25,7 @@ tags: [linux, cheatsheet]
 ```bash
 #!/usr/bin/env bash
 
-[you command here]
+[your command here]
 ```
 
 ### General Command
@@ -42,7 +42,7 @@ info
 
 ### Basic File and Directory Operations
 ```bash
-# pring current working dir
+# print current working dir
 pwd
 
 # show the list of files (-a show all files including .file, 
