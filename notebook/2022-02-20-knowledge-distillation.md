@@ -4,6 +4,8 @@ show-avatar: false
 title: "Explicit and Implicit Knowledge Distillation via Unlabeled Data"
 date: "2023-02-20"
 tags: [paper reading, knowledge distillation]
+cover-img: /assets/img/path.jpg
+thumbnail-img: /assets/img/arxiv.jpg
 ---
 
 ## :fire: Explicit and Implicit Knowledge Distillation via Unlabeled Data :fire:

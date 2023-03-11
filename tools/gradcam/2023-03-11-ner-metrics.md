@@ -4,7 +4,11 @@ show-avatar: false
 title: "Tools: NER_metric, a light-weight evaluation tool for NER"
 date: "2023-03-11"
 tags: [nlp tools]
+cover-img: /assets/img/path.jpg
+thumbnail-img: /assets/img/ner_metrics.jpg
 ---
+
+Source: [GitHub](https://github.com/PL97/NER_eval)
 
 ## NER_eval
 A simple implementation of strict/lenient matching to evaluate NER performance (precision, recall, F1-score) in 60 lines!
