@@ -1,10 +1,11 @@
 ---
 layout: "post"
 show-avatar: false
-title: "Linux command (Basic)"
+title: "Linux command cheat sheet(Basic)"
 date: "2023-03-11"
-tags: [linux]
+tags: [linux, cheatsheet]
 ---
+
 
 *This note mostly adatped from [linuxgems](https://github.com/kevinthew/linuxgems)*
 
