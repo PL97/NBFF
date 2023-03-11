@@ -1,7 +1,7 @@
 ---
 layout: "post"
 show-avatar: false
-title: "Reading"
+title: "Explicit and Implicit Knowledge Distillation via Unlabeled Data"
 date: "2023-02-20"
 tags: [paper reading, knowledge distillation]
 ---

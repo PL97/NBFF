@@ -1,7 +1,7 @@
 ---
 layout: "post"
 show-avatar: false
-title: "Reading"
+title: "Tools: NER_metric, a light-weight evaluation tool for NER"
 date: "2023-03-11"
 tags: [nlp tools]
 ---
