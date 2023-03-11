@@ -1,3 +1,11 @@
+---
+layout: "post"
+show-avatar: false
+title: "Reading"
+date: "2023-02-20"
+tags: [paper reading, knowledge distillation]
+---
+
 ## :fire: Explicit and Implicit Knowledge Distillation via Unlabeled Data :fire:
 **Date: 2023-02-20** [:link:](https://arxiv.org/abs/2302.08771) #tag/computer_vision #tag/knowledge-distillation
 ### Key idea
