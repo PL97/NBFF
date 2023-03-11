@@ -1,9 +1,9 @@
 ---
 layout: "post"
 show-avatar: false
-title: "Robust Representation Learning with Self-Distillation for Domain Generalization"
+title: "Linux command (Basic)"
 date: "2023-03-11"
-tags: [paper reading, self distillation]
+tags: [linux]
 ---
 
 *This note mostly adatped from [linuxgems](https://github.com/kevinthew/linuxgems)*
