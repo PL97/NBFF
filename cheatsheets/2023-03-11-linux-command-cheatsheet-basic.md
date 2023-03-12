@@ -1,7 +1,7 @@
 ---
 layout: "post"
 show-avatar: false
-title: "Linux command cheat sheet (Basic)"
+title: "linux command cheat sheet (Basic)"
 date: "2023-03-11"
 tags: [linux, cheatsheet]
 cover-img: /assets/img/linux.jpg
