@@ -14,6 +14,10 @@ thumbnail-img: /assets/img/linux_header.jpg
 
 - [Bash Script Template](#bash-script-template)
 - [User and Groups](#user-and-groups)
+- [Logical Operator](#logical-operator)
+- [Pip \& redirect](#pip--redirect)
+- [Arguments](#arguments)
+
 
 
 
@@ -64,7 +68,7 @@ talk
 ytalk
 ```
 
-# Logical Operator
+### Logical Operator
 ```bash
 # and, execture all otherwise none
 [command1] && [command2]
