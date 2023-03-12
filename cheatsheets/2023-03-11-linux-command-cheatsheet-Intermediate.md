@@ -9,9 +9,6 @@ thumbnail-img: /assets/img/linux_header.jpg
 ---
 
 
-*This note mostly adatped from [linuxgems](https://github.com/kevinthew/linuxgems)*
-
-
 - [Bash Script Template](#bash-script-template)
 - [User and Groups](#user-and-groups)
 - [Logical Operator](#logical-operator)
@@ -60,12 +57,6 @@ delgroup
 
 # change password
 passwd
-
-# write one line to another user from your terminal:
-talk
-
-# interactive talk program to talk to other users from terminal:
-ytalk
 ```
 
 ### Logical Operator
