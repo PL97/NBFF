@@ -1,7 +1,7 @@
 ---
 layout: "post"
 show-avatar: false
-title: "Tools: NER_metric, a light-weight evaluation tool for NER"
+title: "NER_metric, a light-weight evaluation tool for NER"
 date: "2023-03-11"
 tags: [nlp tools]
 cover-img: /assets/img/path.jpg
