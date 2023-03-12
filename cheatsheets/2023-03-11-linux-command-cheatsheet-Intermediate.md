@@ -112,7 +112,7 @@ ls | grep *.sh | less
 ### Arguments
 
 ```bash
-# use arg when execute bash script
+# take arg from input when execute bash scripts, e.g., example.sh --arg1
 [command] "${arg1}"
 
 # same as above
