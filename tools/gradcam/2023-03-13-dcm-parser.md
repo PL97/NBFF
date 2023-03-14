@@ -1,7 +1,7 @@
 ---
 layout: "post"
 show-avatar: false
-title: "A effecient tool for extract dicom meta data from files"
+title: "DCM-Parser: A effecient tool for extract dicom meta data from files"
 date: "2023-03-11"
 tags: [DICOM, tools]
 cover-img: /assets/img/path.jpg
@@ -11,6 +11,8 @@ thumbnail-img: /assets/img/dcm_parser.png
 ![GitHub Liscence](https://img.shields.io/github/license/PL97/DICOM_Parser)
 ![PyPi Download](https://img.shields.io/pypi/dm/DCM-parser)
 ![Pypi version](https://img.shields.io/pypi/v/DCM-parser)
+
+Source: [GitHub](https://github.com/PL97/DICOM_Parser)
 
 ## DCM-Parser
 A effecient tool for extract dicom meta data from files.
@@ -42,6 +44,7 @@ batch_extraction(source_dir=[YOUR_SOURCE_DIR], dest_dir=[YOUR_TARGET_DIR], save_
 ## How to cite this work
 
 If you find this git repo useful, please consider citing it using the snippet below:
+
 ```bibtex
 @misc{DCM-parser,
     author={Le Peng},
@@ -49,3 +52,4 @@ If you find this git repo useful, please consider citing it using the snippet be
     howpublished={\url{https://github.com/PL97/DICOM_Parser}},
     year={2022}
 }
+```
