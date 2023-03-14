@@ -1,7 +1,7 @@
 ---
 layout: "post"
 show-avatar: false
-title: "DCM-Parser: A effecient tool for extract dicom meta data from files"
+title: "DCM-Parser: A effecient tool to extract dicom meta data from files"
 date: "2023-03-11"
 tags: [DICOM, tools]
 cover-img: /assets/img/path.jpg
