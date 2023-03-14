@@ -1,11 +1,11 @@
 ---
 layout: "post"
 show-avatar: false
-title: "NER_metric, a light-weight evaluation tool for NER"
+title: "A effecient tool for extract dicom meta data from files"
 date: "2023-03-11"
 tags: [DICOM, tools]
 cover-img: /assets/img/path.jpg
-thumbnail-img: /assets/img/dcm_parse.jpg
+thumbnail-img: /assets/img/dcm_parser.png
 ---
 
 ![GitHub Liscence](https://img.shields.io/github/license/PL97/DICOM_Parser)
