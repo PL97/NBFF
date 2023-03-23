@@ -40,7 +40,7 @@ ctrl+a ?
 ctrl+a c
 
 # list all windows
-ctrl+a "
+ctrl+a \"
 
 # switch to window by number
 ctrl+a [number]
@@ -51,11 +51,14 @@ ctrl+a A
 # split the current region horizontally
 ctrl+a S
 
-# split the current region vertically
+# split the current region vertically (combine with ctrl+a tab and ctrl+a c)
 ctrl+a |
 
 # swith to the next region in the current window
-ctr+a tab
+ctrl+a tab
+
+# create a new window (with shell)
+ctrl+a c
 
 # toggle between current and previous window
 ctrl+a ctrl+a
