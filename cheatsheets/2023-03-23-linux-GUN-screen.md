@@ -32,7 +32,7 @@ screen -r/-x [session id]
 
 Basic command with screen
 
-```
+```bash
 # display avaliable command (can find reference for belows)
 ctrl+a ?
 
