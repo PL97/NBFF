@@ -2,15 +2,15 @@
 layout: "post"
 show-avatar: false
 title: "Git command cheat sheet"
-date: "2023-03-23"
+date: "2023-03-28"
 tags: [Git, cheatsheet]
-cover-img: /assets/img/linux.jpg
-thumbnail-img: /assets/img/linux_header.jpg
+cover-img: /assets/img/git_header.png
+thumbnail-img: /assets/img/git_icon.png
 ---
 
 credit: [reference website](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
 
-<img src='../../assets/img/git.png' alt="git development workflow" width="600" height="128">
+<img src='../../assets/img/git.png' alt="git development workflow" height="700">
 
 - [Config your git with github](#config-your-git-with-github)
 - [Local operations](#local-operations)
