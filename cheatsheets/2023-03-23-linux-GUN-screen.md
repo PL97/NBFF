@@ -80,6 +80,12 @@ ctrl+a n
 
 # move to previous screen window
 ctrl+a n
+
+# freeze screen
+ctrl+a ctrl+s
+
+# unfreeze screen
+ctrl+a ctrl+q
 ```
 
 :star: customize your screen session!
